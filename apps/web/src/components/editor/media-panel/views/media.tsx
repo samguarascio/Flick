@@ -12,6 +12,7 @@ import {
   List,
   Loader2,
   Music,
+  Plus,
   Video,
 } from "lucide-react";
 import { useRef, useState, useMemo } from "react";
@@ -280,9 +281,18 @@ export function MediaView() {
             <Button
               variant="outline"
               size="lg"
+              onClick={() => {}}
+              className="bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 text-white border-none px-4 flex-1 justify-center items-center h-9 opacity-100 hover:opacity-90 transition-all duration-300 relative rounded-md hover:shadow-lg hover:scale-[1.02]"
+            >
+              <Plus className="h-4 w-4" />
+              <span>Create</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
               onClick={handleFileSelect}
               disabled={isProcessing}
-              className="!bg-background px-4 flex-1 justify-center items-center h-9 opacity-100 hover:opacity-75 transition-opacity"
+              className="!bg-background px-4 w-32 justify-center items-center h-9 opacity-100 hover:opacity-75 transition-opacity"
             >
               {isProcessing ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -291,6 +301,7 @@ export function MediaView() {
               )}
               <span>Upload</span>
             </Button>
+
             <div className="flex items-center gap-0">
               <TooltipProvider>
                 <Tooltip>
