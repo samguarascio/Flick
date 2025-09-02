@@ -606,57 +606,112 @@ export function Timeline() {
       onMouseEnter={() => setIsInTimeline(true)}
       onMouseLeave={() => setIsInTimeline(false)}
     >
-      {/* Selected Video Options */}
-      {selectedElements.length === 1 && (() => {
-        const selectedElement = selectedElements[0];
-        const track = tracks.find(t => t.id === selectedElement.trackId);
-        const element = track?.elements.find(e => e.id === selectedElement.elementId);
+      {/* Video Options Section - Always Visible */}
+      <div className="border-b flex items-center py-3 bg min-h-[60px]">
+        {/* Left side - empty space to align with track labels */}
+        <div className="w-28" />
         
-        if (element?.type === "media") {
-          return (
-            <div className="border-b flex items-center gap-8 pl-32 pr-4 py-3 bg-accent/5">
-              <div className="relative group">
-                <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 rounded-[0.8rem] group-hover:opacity-90 transition-opacity" />
-                <Button 
-                  variant="outline" 
-                  size="default" 
-                  className="relative text-sm px-6 bg-background rounded-[0.8rem] border-0"
-                  onClick={() => {
-                    const store = usePropertiesViewStore.getState();
-                    store.setAITask("Make an Edit");
-                    store.setActiveTab("ai");
-                  }}
-                >
-                  <Wand2 className="h-4 w-4 mr-2" />
-                  Make an edit
-                </Button>
+        {/* Content starts right at the vertical separator line - no gap */}
+        <div className="flex items-center gap-4">
+          {/* Buttons only show when a video is selected */}
+          {selectedElements.length === 1 && (() => {
+            const selectedElement = selectedElements[0];
+            const track = tracks.find(t => t.id === selectedElement.trackId);
+            const element = track?.elements.find(e => e.id === selectedElement.elementId);
+            
+            if (element?.type === "media") {
+              return (
+                <>
+                  <div className="relative group">
+                    <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 rounded-[0.8rem] group-hover:opacity-90 transition-opacity" />
+                    <Button 
+                      variant="outline" 
+                      size="default" 
+                      className="relative text-sm px-6 bg-background rounded-[0.8rem] border-0"
+                      onClick={() => {
+                        const store = usePropertiesViewStore.getState();
+                        store.setAITask("Make an Edit");
+                        store.setActiveTab("ai");
+                      }}
+                    >
+                      <Wand2 className="h-4 w-4 mr-2" />
+                      Make an edit
+                    </Button>
+                  </div>
+                  <div className="relative group">
+                    <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 rounded-[0.8rem] group-hover:opacity-90 transition-opacity" />
+                    <Button 
+                      variant="outline" 
+                      size="default" 
+                      className="relative text-sm px-6 bg-background rounded-[0.8rem] border-0"
+                      onClick={() => {
+                        const store = usePropertiesViewStore.getState();
+                        store.setAITask("Extend Clip");
+                        store.setActiveTab("ai");
+                      }}
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Extend clip
+                    </Button>
+                  </div>
+                </>
+              );
+            }
+            return null;
+          })()}
+          
+          {/* Instructional text when nothing is selected */}
+          {selectedElements.length === 0 && (
+            <span className="text-sm text-muted-foreground">
+              Select an element to modify it with AI.
+            </span>
+          )}
+        </div>
+        
+        <div className="flex-1" />
+        
+        {/* Element info shows for any selected element type */}
+        {selectedElements.length === 1 && (() => {
+          const selectedElement = selectedElements[0];
+          const track = tracks.find(t => t.id === selectedElement.trackId);
+          const element = track?.elements.find(e => e.id === selectedElement.elementId);
+          
+          if (element) {
+            // Get display content based on element type
+            const getDisplayContent = () => {
+              if (element.type === "media") {
+                return element.name.replace(/\.[^/.]+$/, "");
+              } else if (element.type === "text") {
+                return element.content;
+              }
+              return element.name;
+            };
+            
+            // Get appropriate icon based on element type
+            const getElementIcon = () => {
+              switch (element.type) {
+                case "media":
+                  return <Video className="h-4 w-4 text-muted-foreground" />;
+                case "text":
+                  return <TypeIcon className="h-4 w-4 text-muted-foreground" />;
+                default:
+                  return <Video className="h-4 w-4 text-muted-foreground" />;
+              }
+            };
+            
+            return (
+              <div className="flex items-center gap-2 pr-4">
+                {getElementIcon()}
+                <span className="text-sm font-medium">{getDisplayContent()}</span>
               </div>
-              <div className="relative group">
-                <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 rounded-[0.8rem] group-hover:opacity-90 transition-opacity" />
-                <Button 
-                  variant="outline" 
-                  size="default" 
-                  className="relative text-sm px-6 bg-background rounded-[0.8rem] border-0"
-                  onClick={() => {
-                    const store = usePropertiesViewStore.getState();
-                    store.setAITask("Extend Clip");
-                    store.setActiveTab("ai");
-                  }}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Extend clip
-                </Button>
-              </div>
-              <div className="flex-1" />
-              <div className="flex items-center gap-2">
-                <Video className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">{element.name}</span>
-              </div>
-            </div>
-          );
-        }
-        return null;
-      })()}
+            );
+          }
+          return null;
+        })()}
+        
+        {/* Invisible spacer to maintain height when no content */}
+        <div className="w-0 h-9 opacity-0 pointer-events-none" />
+      </div>
 
       <TimelineToolbar zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
 

@@ -24,7 +24,7 @@ export function AIProperties({ onClose, task }: AIPropertiesProps) {
       <div className="h-full w-full bg-panel rounded-[calc(0.75rem-1px)]">
         {/* Header with close button */}
         <div className="flex items-center justify-between p-4">
-          <h2 className="text-sm font-medium">{task || "AI Generation"}</h2>
+          <h2 className="text-m font-medium">{task || "AI Generation"}</h2>
           <button
             onClick={onClose}
             className="hover:text-muted-foreground transition-colors cursor-pointer"
