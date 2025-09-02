@@ -1,5 +1,6 @@
 "use client";
 
+import { useHover } from "../../../hooks/use-hover.ts";
 import {
   Scissors,
   Trash2,
@@ -225,7 +226,7 @@ export function TimelineElement({
             }`}
           >
             <div
-              className={`absolute top-[0.25rem] bottom-[0.25rem] rounded-s-[0.25rem] left-0 right-0${isSelected ? " rounded-e-[0.25rem]" : ""}`}
+              className={`absolute top-[0.25rem] bottom-[0.25rem] rounded-s-[0.25rem] left-0 right-0${(isSelected || !isHovered) ? " rounded-e-[0.25rem]" : ""}`}
               style={{
                 backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
                 backgroundRepeat: "repeat-x",
@@ -269,11 +270,13 @@ export function TimelineElement({
   };
 
   const isMuted = element.type === "media" ? element.muted === true : false;
+  const [ref, isHovered] = useHover();
 
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <div
+          ref={ref}
           className={`absolute top-0 h-full select-none timeline-element ${
             isBeingDragged ? "z-50" : "z-10"
           }`}
@@ -312,22 +315,24 @@ export function TimelineElement({
                 )}
               </div>
             )}
-            {!isSelected
-             && mediaItem
-             && (mediaItem.type === "image" || mediaItem.type === "video")
-             && (
-              <div
-                className={`absolute right-[-50px] top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500`}
-                style={{
-                  width: "50px",
-                  borderRadius: "0 0.75rem 0.75rem 0",
-                  display: "flex",
-                  alignItems: "center"
-                }}
-              >
-                <Plus className="m-auto" />
-              </div>
-            )}
+            {!isSelected &&
+              isHovered &&
+              mediaItem &&
+              (mediaItem.type === "image" || mediaItem.type === "video") && (
+                <div
+                  className={
+                    "absolute right-[-50px] top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500"
+                  }
+                  style={{
+                    width: "50px",
+                    borderRadius: "0 0.75rem 0.75rem 0",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Plus className="m-auto" />
+                </div>
+              )}
             {isSelected && (
               <>
                 <div
