@@ -225,7 +225,7 @@ export function TimelineElement({
             }`}
           >
             <div
-              className={`absolute top-[0.25rem] bottom-[0.25rem] left-0 right-[0.75rem]`}
+              className={`absolute top-[0.25rem] bottom-[0.25rem] left-0 right-0`}
               style={{
                 backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
                 backgroundRepeat: "repeat-x",
@@ -288,7 +288,7 @@ export function TimelineElement({
           onMouseLeave={resizing ? handleResizeEnd : undefined}
         >
           <div
-            className={`relative h-full rounded-[0.5rem] cursor-pointer overflow-hidden ${getTrackElementClasses(
+            className={`relative h-full rounded-[0.5rem] cursor-pointer overflow-visible ${getTrackElementClasses(
               track.type
             )} ${isSelected ? "" : ""} ${
               isBeingDragged ? "z-50" : "z-10"
@@ -317,7 +317,7 @@ export function TimelineElement({
              && (mediaItem.type === "image" || mediaItem.type === "video")
              && (
               <div
-                className={`absolute right-0 top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500`}
+                className={`absolute right-[-50px] top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500`}
                 style={{
                   width: "50px",
                   borderRadius: "0 0.75rem 0.75rem 0",
