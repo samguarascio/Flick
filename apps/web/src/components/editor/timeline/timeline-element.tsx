@@ -222,7 +222,7 @@ export function TimelineElement({
         <div className="w-full h-full flex items-center justify-center">
           <div
             className={`w-full h-full relative rounded-[0.25rem] ${
-              isSelected ? "bg-primary" : "bg-transparent"
+              isSelected ? "bg-blue-500" : "bg-transparent"
             }`}
           >
             <div
@@ -321,7 +321,7 @@ export function TimelineElement({
               (mediaItem.type === "image" || mediaItem.type === "video") && (
                 <div
                   className={
-                    "absolute right-[-50px] top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 via-pink-500 to-white"
+                    "absolute right-[-50px] top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 to-blue-500"
                   }
                   style={{
                     width: "50px",
@@ -336,13 +336,13 @@ export function TimelineElement({
             {isSelected && (
               <>
                 <div
-                  className="absolute left-0 top-0 bottom-0 rounded-s-[0.5rem] w-[0.6rem] cursor-w-resize bg-primary z-50 flex items-center justify-center"
+                  className="absolute left-0 top-0 bottom-0 rounded-s-[0.5rem] w-[0.6rem] cursor-w-resize bg-blue-500 z-50 flex items-center justify-center"
                   onMouseDown={(e) => handleResizeStart(e, element.id, "left")}
                 >
                   <div className="w-[0.2rem] h-[1.5rem] bg-foreground/75 rounded-full" />
                 </div>
                 <div
-                  className="absolute right-0 top-0 bottom-0 rounded-e-[0.5rem] w-[0.6rem] cursor-e-resize bg-primary z-50 flex items-center justify-center"
+                  className="absolute right-0 top-0 bottom-0 rounded-e-[0.5rem] w-[0.6rem] cursor-e-resize bg-blue-500 z-50 flex items-center justify-center"
                   onMouseDown={(e) => handleResizeStart(e, element.id, "right")}
                 >
                   <div className="w-[0.2rem] h-[1.5rem] bg-foreground/75 rounded-full" />
