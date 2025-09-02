@@ -278,15 +278,34 @@ export function MediaView() {
         <div className="p-3 pb-2 bg-panel">
           {/* Search and filter controls */}
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => {}}
-              className="bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 text-white border-none px-4 flex-1 justify-center items-center h-9 opacity-100 hover:opacity-90 transition-all duration-300 relative rounded-md hover:shadow-lg hover:scale-[1.02]"
-            >
-              <Plus className="h-4 w-4" />
-              <span>Create</span>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 text-white border-none px-4 flex-1 justify-center items-center h-9 opacity-100 hover:opacity-90 transition-opacity gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span>Create</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="min-w-[calc(100%+4rem)] pr-8 pl-4">
+                <DropdownMenuItem className="gap-4 py-3">
+                  <Image className="h-6 w-6 shrink-0" />
+                  <div className="flex flex-col">
+                    <span className="text-base font-medium">Image</span>
+                    <span className="text-sm text-muted-foreground">Generate a still photo.</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="gap-4 py-3">
+                  <Video className="h-6 w-6 shrink-0" />
+                  <div className="flex flex-col">
+                    <span className="text-base font-medium">Video</span>
+                    <span className="text-sm text-muted-foreground">Generate an 8 second video.</span>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button
               variant="outline"
               size="lg"
