@@ -81,6 +81,7 @@ export function Timeline() {
     setSelectedElements,
     toggleTrackMute,
     dragState,
+    selectedElements,
   } = useTimelineStore();
   const { mediaFiles, addMediaFile } = useMediaStore();
   const { activeProject } = useProjectStore();
@@ -602,6 +603,46 @@ export function Timeline() {
       onMouseEnter={() => setIsInTimeline(true)}
       onMouseLeave={() => setIsInTimeline(false)}
     >
+      {/* Selected Video Options */}
+      {selectedElements.length === 1 && (() => {
+        const selectedElement = selectedElements[0];
+        const track = tracks.find(t => t.id === selectedElement.trackId);
+        const element = track?.elements.find(e => e.id === selectedElement.elementId);
+        
+        if (element?.type === "media") {
+          return (
+            <div className="border-b flex items-center gap-8 pl-32 pr-4 py-3 bg-accent/5">
+              <div className="relative group">
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 rounded-[0.8rem] group-hover:opacity-90 transition-opacity" />
+                <Button 
+                  variant="outline" 
+                  size="default" 
+                  className="relative text-sm px-6 bg-background rounded-[0.8rem] border-0"
+                >
+                  Make an edit
+                </Button>
+              </div>
+              <div className="relative group">
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 rounded-[0.8rem] group-hover:opacity-90 transition-opacity" />
+                <Button 
+                  variant="outline" 
+                  size="default" 
+                  className="relative text-sm px-6 bg-background rounded-[0.8rem] border-0"
+                >
+                  Extend clip
+                </Button>
+              </div>
+              <div className="flex-1" />
+              <div className="flex items-center gap-2">
+                <Video className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium">{element.name}</span>
+              </div>
+            </div>
+          );
+        }
+        return null;
+      })()}
+
       <TimelineToolbar zoomLevel={zoomLevel} setZoomLevel={setZoomLevel} />
 
       {/* Timeline Container */}
