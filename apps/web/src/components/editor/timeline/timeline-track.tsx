@@ -1128,7 +1128,7 @@ export function TimelineTrackContent({
               isDropping
                 ? wouldOverlap
                   ? "border-red-500 bg-red-500/10 text-red-600"
-                  : "border-blue-500 bg-blue-500/10 text-blue-600"
+                  : "border-white bg-white/10 text-white"
                 : "border-muted/30"
             }`}
           >

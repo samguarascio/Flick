@@ -24,6 +24,8 @@ import {
   Eye,
   VolumeOff,
   Volume2,
+  Wand2,
+  Plus,
 } from "lucide-react";
 import {
   Tooltip,
@@ -625,6 +627,7 @@ export function Timeline() {
                     store.setActiveTab("ai");
                   }}
                 >
+                  <Wand2 className="h-4 w-4 mr-2" />
                   Make an edit
                 </Button>
               </div>
@@ -640,6 +643,7 @@ export function Timeline() {
                     store.setActiveTab("ai");
                   }}
                 >
+                  <Plus className="h-4 w-4 mr-2" />
                   Extend clip
                 </Button>
               </div>

@@ -321,7 +321,7 @@ export function TimelineElement({
               (mediaItem.type === "image" || mediaItem.type === "video") && (
                 <div
                   className={
-                    "absolute right-[-50px] top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500"
+                    "absolute right-[-50px] top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 via-pink-500 to-white"
                   }
                   style={{
                     width: "50px",
