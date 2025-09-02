@@ -236,17 +236,6 @@ export function TimelineElement({
               aria-label={`Tiled ${isImage ? "background" : "thumbnail"} of ${mediaItem.name}`}
             />
           </div>
-          <div
-            className={`absolute right-0 top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500`}
-            style={{
-              width: "50px",
-              borderRadius: "0 0.75rem 0.75rem 0",
-              display: "flex",
-              alignItems: "center"
-            }}
-          >
-            <Plus className="m-auto" />
-          </div>
         </div>
       );
     }
@@ -323,7 +312,22 @@ export function TimelineElement({
                 )}
               </div>
             )}
-
+            {!isSelected
+             && mediaItem
+             && (mediaItem.type === "image" || mediaItem.type === "video")
+             && (
+              <div
+                className={`absolute right-0 top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500`}
+                style={{
+                  width: "50px",
+                  borderRadius: "0 0.75rem 0.75rem 0",
+                  display: "flex",
+                  alignItems: "center"
+                }}
+              >
+                <Plus className="m-auto" />
+              </div>
+            )}
             {isSelected && (
               <>
                 <div
