@@ -54,6 +54,7 @@ export function PropertyItemValue({
 
 interface PropertyGroupProps {
   title: string;
+  subtitle?: string;
   children: React.ReactNode;
   defaultExpanded?: boolean;
   className?: string;
@@ -62,6 +63,7 @@ interface PropertyGroupProps {
 
 export function PropertyGroup({
   title,
+  subtitle,
   children,
   defaultExpanded = true,
   className,
@@ -78,7 +80,12 @@ export function PropertyGroup({
         <PropertyItemLabel className={cn("cursor-pointer", titleClassName)}>
           {title}
         </PropertyItemLabel>
-        <ChevronDown className={cn("size-3", !isExpanded && "-rotate-90")} />
+        {!isExpanded && subtitle && (
+          <span className="text-xs text-muted-foreground ml-1">
+            {subtitle}
+          </span>
+        )}
+        <ChevronDown className={cn("size-3 ml-auto", !isExpanded && "-rotate-90")} />
       </div>
       {isExpanded && <PropertyItemValue>{children}</PropertyItemValue>}
     </PropertyItem>

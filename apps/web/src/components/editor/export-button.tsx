@@ -80,6 +80,37 @@ function ExportPopover({
   const [progress, setProgress] = useState(0);
   const [exportResult, setExportResult] = useState<ExportResult | null>(null);
 
+  // Helper functions to get display text for each option
+  const getFormatDisplayText = (format: ExportFormat) => {
+    switch (format) {
+      case "mp4":
+        return "MP4";
+      case "webm":
+        return "WebM";
+      default:
+        return format;
+    }
+  };
+
+  const getQualityDisplayText = (quality: ExportQuality) => {
+    switch (quality) {
+      case "low":
+        return "Low";
+      case "medium":
+        return "Medium";
+      case "high":
+        return "High";
+      case "very_high":
+        return "Very High";
+      default:
+        return quality;
+    }
+  };
+
+  const getAudioDisplayText = (includeAudio: boolean) => {
+    return includeAudio ? "Enabled" : "Disabled";
+  };
+
   const handleExport = async () => {
     if (!activeProject) return;
 
@@ -133,7 +164,7 @@ function ExportPopover({
       <>
         <div className="flex items-center justify-between">
           <h3 className=" font-medium">
-            {isExporting ? "Exporting project" : "Export project"}
+            {isExporting ? "Exporting project" : "Export Video"}
           </h3>
           <Button variant="text" size="icon" onClick={handleClose}>
             <X className="!size-5 text-foreground/85" />
@@ -146,6 +177,7 @@ function ExportPopover({
               <div className="flex flex-col gap-3">
                 <PropertyGroup
                   title="Format"
+                  subtitle={getFormatDisplayText(format)}
                   titleClassName="text-sm"
                   defaultExpanded={false}
                 >
@@ -170,6 +202,7 @@ function ExportPopover({
 
                 <PropertyGroup
                   title="Quality"
+                  subtitle={getQualityDisplayText(quality)}
                   titleClassName="text-sm"
                   defaultExpanded={false}
                 >
@@ -202,6 +235,7 @@ function ExportPopover({
 
                 <PropertyGroup
                   title="Audio"
+                  subtitle={getAudioDisplayText(includeAudio)}
                   titleClassName="text-sm"
                   defaultExpanded={false}
                 >
