@@ -38,6 +38,7 @@ import {
   ContextMenuTrigger,
 } from "../../ui/context-menu";
 import { useTimelineStore } from "@/stores/timeline-store";
+import { usePropertiesViewStore } from "@/stores/properties-view-store";
 import { useMediaStore } from "@/stores/media-store";
 import { usePlaybackStore } from "@/stores/playback-store";
 import { DEFAULT_FPS, useProjectStore } from "@/stores/project-store";
@@ -618,6 +619,11 @@ export function Timeline() {
                   variant="outline" 
                   size="default" 
                   className="relative text-sm px-6 bg-background rounded-[0.8rem] border-0"
+                  onClick={() => {
+                    const store = usePropertiesViewStore.getState();
+                    store.setAITask("Make an Edit");
+                    store.setActiveTab("ai");
+                  }}
                 >
                   Make an edit
                 </Button>
@@ -628,6 +634,11 @@ export function Timeline() {
                   variant="outline" 
                   size="default" 
                   className="relative text-sm px-6 bg-background rounded-[0.8rem] border-0"
+                  onClick={() => {
+                    const store = usePropertiesViewStore.getState();
+                    store.setAITask("Extend Clip");
+                    store.setActiveTab("ai");
+                  }}
                 >
                   Extend clip
                 </Button>

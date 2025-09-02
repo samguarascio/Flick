@@ -43,6 +43,7 @@ import {
 } from "@/components/ui/tooltip";
 import { usePanelStore } from "@/stores/panel-store";
 import { useMediaPanelStore } from "../store";
+import { usePropertiesViewStore } from "@/stores/properties-view-store";
 
 function MediaItemWithContextMenu({
   item,
@@ -290,14 +291,28 @@ export function MediaView() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="min-w-[calc(100%+4rem)] pr-8 pl-4">
-                <DropdownMenuItem className="gap-4 py-3">
+                <DropdownMenuItem 
+                  className="gap-4 py-3"
+                  onClick={() => {
+                    const store = usePropertiesViewStore.getState();
+                    store.setAITask("Create Image");
+                    store.setActiveTab("ai");
+                  }}
+                >
                   <Image className="h-6 w-6 shrink-0" />
                   <div className="flex flex-col">
                     <span className="text-base font-medium">Image</span>
                     <span className="text-sm text-muted-foreground">Generate a still photo.</span>
                   </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="gap-4 py-3">
+                <DropdownMenuItem 
+                  className="gap-4 py-3"
+                  onClick={() => {
+                    const store = usePropertiesViewStore.getState();
+                    store.setAITask("Create Video");
+                    store.setActiveTab("ai");
+                  }}
+                >
                   <Video className="h-6 w-6 shrink-0" />
                   <div className="flex flex-col">
                     <span className="text-base font-medium">Video</span>

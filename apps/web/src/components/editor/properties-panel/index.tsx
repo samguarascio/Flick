@@ -6,49 +6,66 @@ import { ScrollArea } from "../../ui/scroll-area";
 import { AudioProperties } from "./audio-properties";
 import { MediaProperties } from "./media-properties";
 import { TextProperties } from "./text-properties";
-import { SquareSlashIcon } from "lucide-react";
+import { AIProperties } from "./ai-properties";
+import { SquareSlashIcon, X } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PROPERTIES_VIEW_TABS, usePropertiesViewStore } from "@/stores/properties-view-store";
 
 export function PropertiesPanel() {
   const { selectedElements, tracks } = useTimelineStore();
   const { mediaFiles } = useMediaStore();
+  const { activeTab, setActiveTab } = usePropertiesViewStore();
 
   return (
-    <>
-      {selectedElements.length > 0 ? (
-        <ScrollArea className="h-full bg-panel rounded-sm">
-          {selectedElements.map(({ trackId, elementId }) => {
-            const track = tracks.find((t) => t.id === trackId);
-            const element = track?.elements.find((e) => e.id === elementId);
+    <div className="flex flex-col h-full bg-panel rounded-sm">
+      <div className="flex-1">
+        {activeTab === "properties" ? (
+          <ScrollArea className="h-full">
+            {selectedElements.length > 0 ? (
+              <>
+                {selectedElements.map(({ trackId, elementId }) => {
+                  const track = tracks.find((t) => t.id === trackId);
+                  const element = track?.elements.find((e) => e.id === elementId);
 
-            if (element?.type === "text") {
-              return (
-                <div key={elementId}>
-                  <TextProperties element={element} trackId={trackId} />
-                </div>
-              );
-            }
-            if (element?.type === "media") {
-              const mediaFile = mediaFiles.find(
-                (file) => file.id === element.mediaId
-              );
+                  if (element?.type === "text") {
+                    return (
+                      <div key={elementId}>
+                        <TextProperties element={element} trackId={trackId} />
+                      </div>
+                    );
+                  }
+                  if (element?.type === "media") {
+                    const mediaFile = mediaFiles.find(
+                      (file) => file.id === element.mediaId
+                    );
 
-              if (mediaFile?.type === "audio") {
-                return <AudioProperties key={elementId} element={element} />;
-              }
+                    if (mediaFile?.type === "audio") {
+                      return <AudioProperties key={elementId} element={element} />;
+                    }
 
-              return (
-                <div key={elementId}>
-                  <MediaProperties element={element} />
-                </div>
-              );
-            }
-            return null;
-          })}
-        </ScrollArea>
-      ) : (
-        <EmptyView />
-      )}
-    </>
+                    return (
+                      <div key={elementId}>
+                        <MediaProperties element={element} />
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
+              </>
+            ) : (
+              <EmptyView />
+            )}
+          </ScrollArea>
+        ) : (
+          <div className="h-full">
+            <AIProperties 
+              onClose={() => setActiveTab("properties")} 
+              task={usePropertiesViewStore.getState().aiTask || undefined}
+            />
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
