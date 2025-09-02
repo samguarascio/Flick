@@ -41,7 +41,7 @@ export function PanelPresetSelector() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="secondary"
+          variant="text"
           size="sm"
           className="h-8 px-2 flex items-center gap-1 text-xs"
           title="Panel Presets"

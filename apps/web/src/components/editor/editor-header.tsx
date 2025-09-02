@@ -48,7 +48,7 @@ export function EditorHeader() {
   };
 
   const leftContent = (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-3">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -95,6 +95,10 @@ export function EditorHeader() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <div className="flex items-center ">
+        <PanelPresetSelector />
+        <KeyboardShortcutsHelp />
+      </div>
       <RenameProjectDialog
         isOpen={isRenameDialogOpen}
         onOpenChange={setIsRenameDialogOpen}
@@ -112,8 +116,6 @@ export function EditorHeader() {
 
   const rightContent = (
     <nav className="flex items-center gap-2">
-      <PanelPresetSelector />
-      <KeyboardShortcutsHelp />
       <ExportButton />
     </nav>
   );
