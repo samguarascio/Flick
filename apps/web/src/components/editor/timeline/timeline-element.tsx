@@ -325,7 +325,7 @@ export function TimelineElement({
                   }
                   style={{
                     width: "50px",
-                    borderRadius: "0 0.75rem 0.75rem 0",
+                    borderRadius: "0 0.25rem 0.25rem 0",
                     display: "flex",
                     alignItems: "center",
                   }}
