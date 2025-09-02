@@ -221,12 +221,12 @@ export function TimelineElement({
       return (
         <div className="w-full h-full flex items-center justify-center">
           <div
-            className={`w-full h-full relative rounded-[0.25rem] ${
+            className={`w-full h-full relative rounded-[0.5rem] ${
               isSelected ? "bg-blue-500" : "bg-transparent"
             }`}
           >
             <div
-              className={`absolute top-[0.25rem] bottom-[0.25rem] rounded-s-[0.25rem] left-0 right-0${(isSelected || !isHovered) ? " rounded-e-[0.25rem]" : ""}`}
+              className={`absolute top-[0.25rem] bottom-[0.25rem] rounded-s-[0.5rem] left-0 right-0${(isSelected || !isHovered) ? " rounded-e-[0.5rem]" : ""}`}
               style={{
                 backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
                 backgroundRepeat: "repeat-x",
@@ -325,7 +325,7 @@ export function TimelineElement({
                   }
                   style={{
                     width: "50px",
-                    borderRadius: "0 0.25rem 0.25rem 0",
+                    borderRadius: "0 0.5rem 0.5rem 0",
                     display: "flex",
                     alignItems: "center",
                   }}
