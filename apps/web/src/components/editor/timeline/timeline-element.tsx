@@ -10,6 +10,7 @@ import {
   Eye,
   Volume2,
   VolumeX,
+  Plus,
 } from "lucide-react";
 import { useMediaStore } from "@/stores/media-store";
 import { useTimelineStore } from "@/stores/timeline-store";
@@ -224,7 +225,7 @@ export function TimelineElement({
             }`}
           >
             <div
-              className={`absolute top-[0.25rem] bottom-[0.25rem] left-0 right-0`}
+              className={`absolute top-[0.25rem] bottom-[0.25rem] left-0 right-[0.75rem]`}
               style={{
                 backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
                 backgroundRepeat: "repeat-x",
@@ -234,6 +235,17 @@ export function TimelineElement({
               }}
               aria-label={`Tiled ${isImage ? "background" : "thumbnail"} of ${mediaItem.name}`}
             />
+          </div>
+          <div
+            className={`absolute right-0 top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500`}
+            style={{
+              width: "50px",
+              borderRadius: "0 0.75rem 0.75rem 0",
+              display: "flex",
+              alignItems: "center"
+            }}
+          >
+            <Plus className="m-auto" />
           </div>
         </div>
       );
