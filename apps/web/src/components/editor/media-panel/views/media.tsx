@@ -284,7 +284,7 @@ export function MediaView() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 text-white border-none px-4 flex-1 justify-center items-center opacity-100 hover:opacity-90 transition-opacity gap-2"
+                  className="bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 text-white shadow-xs border px-4 flex-1 justify-center items-center opacity-100 hover:opacity-90 transition-opacity gap-2"
                 >
                   <Plus className="h-4 w-4" />
                   <span>Create</span>

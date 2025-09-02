@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { FaDiscord } from "react-icons/fa6";
 import { PanelPresetSelector } from "./panel-preset-selector";
 import { ExportButton } from "./export-button";
+import { ProgressBar } from "./progress-bar";
 
 export function EditorHeader() {
   const { activeProject, renameProject, deleteProject } = useProjectStore();
@@ -115,7 +116,13 @@ export function EditorHeader() {
   );
 
   const rightContent = (
-    <nav className="flex items-center gap-2">
+    <nav className="flex items-center gap-4">
+      <ProgressBar 
+        value={1} 
+        maxValue={2}
+        hasPro={true} 
+        onIncrement={() => console.log("Increment clicked")}
+      />
       <ExportButton />
     </nav>
   );
