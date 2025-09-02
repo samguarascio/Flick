@@ -220,12 +220,12 @@ export function TimelineElement({
       return (
         <div className="w-full h-full flex items-center justify-center">
           <div
-            className={`w-full h-full relative ${
+            className={`w-full h-full relative rounded-[0.25rem] ${
               isSelected ? "bg-primary" : "bg-transparent"
             }`}
           >
             <div
-              className={`absolute top-[0.25rem] bottom-[0.25rem] left-0 right-0`}
+              className={`absolute top-[0.25rem] bottom-[0.25rem] rounded-s-[0.25rem] left-0 right-0${isSelected ? " rounded-e-[0.25rem]" : ""}`}
               style={{
                 backgroundImage: imageUrl ? `url(${imageUrl})` : "none",
                 backgroundRepeat: "repeat-x",
@@ -331,13 +331,13 @@ export function TimelineElement({
             {isSelected && (
               <>
                 <div
-                  className="absolute left-0 top-0 bottom-0 w-[0.6rem] cursor-w-resize bg-primary z-50 flex items-center justify-center"
+                  className="absolute left-0 top-0 bottom-0 rounded-s-[0.5rem] w-[0.6rem] cursor-w-resize bg-primary z-50 flex items-center justify-center"
                   onMouseDown={(e) => handleResizeStart(e, element.id, "left")}
                 >
                   <div className="w-[0.2rem] h-[1.5rem] bg-foreground/75 rounded-full" />
                 </div>
                 <div
-                  className="absolute right-0 top-0 bottom-0 w-[0.6rem] cursor-e-resize bg-primary z-50 flex items-center justify-center"
+                  className="absolute right-0 top-0 bottom-0 rounded-e-[0.5rem] w-[0.6rem] cursor-e-resize bg-primary z-50 flex items-center justify-center"
                   onMouseDown={(e) => handleResizeStart(e, element.id, "right")}
                 >
                   <div className="w-[0.2rem] h-[1.5rem] bg-foreground/75 rounded-full" />
