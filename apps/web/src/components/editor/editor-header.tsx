@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import { FaDiscord } from "react-icons/fa6";
 import { PanelPresetSelector } from "./panel-preset-selector";
 import { ExportButton } from "./export-button";
-import { ThemeToggle } from "../theme-toggle";
+
 
 export function EditorHeader() {
   const { activeProject, renameProject, deleteProject } = useProjectStore();
@@ -116,7 +116,6 @@ export function EditorHeader() {
       <PanelPresetSelector />
       <KeyboardShortcutsHelp />
       <ExportButton />
-      <ThemeToggle />
     </nav>
   );
 

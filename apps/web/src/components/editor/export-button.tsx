@@ -50,7 +50,7 @@ export function ExportButton() {
             }
           }}
         >
-          <div className="flex items-center gap-1.5 bg-white rounded-[0.8rem] px-4 py-1 relative shadow-[0_1px_3px_0px_rgba(0,0,0,0.15)]">
+          <div className="flex items-center gap-1.5 bg-white rounded-[0.8rem] px-4 py-1 relative shadow-[0_1px_3px_0px_rgba(0,0,0,0.3)]">
             <TransitionUpIcon className="z-50 text-black" />
             <span className="text-[0.875rem] z-50 text-black">Export</span>
           </div>
