@@ -3,8 +3,8 @@ import { persist } from "zustand/middleware";
 
 export type PanelPreset =
   | "default"
+  | "long-timeline"
   | "media"
-  | "inspector"
   | "vertical-preview";
 
 interface PanelSizes {
@@ -17,6 +17,13 @@ interface PanelSizes {
 
 export const PRESET_CONFIGS: Record<PanelPreset, PanelSizes> = {
   default: {
+    toolsPanel: 30,
+    previewPanel: 70,
+    propertiesPanel: 30,
+    mainContent: 75,
+    timeline: 25,
+  },
+  "long-timeline": {
     toolsPanel: 25,
     previewPanel: 50,
     propertiesPanel: 25,
@@ -28,13 +35,6 @@ export const PRESET_CONFIGS: Record<PanelPreset, PanelSizes> = {
     previewPanel: 45,
     propertiesPanel: 25,
     mainContent: 100,
-    timeline: 25,
-  },
-  inspector: {
-    toolsPanel: 30,
-    previewPanel: 70,
-    propertiesPanel: 30,
-    mainContent: 75,
     timeline: 25,
   },
   "vertical-preview": {
@@ -72,8 +72,8 @@ export const usePanelStore = create<PanelState>()(
       activePreset: "default" as PanelPreset,
       presetCustomSizes: {
         default: {},
+        "long-timeline": {},
         media: {},
-        inspector: {},
         "vertical-preview": {},
       },
       resetCounter: 0,

@@ -143,7 +143,7 @@ export function MediaView() {
   };
 
   const filteredMediaItems = useMemo(() => {
-    let filtered = mediaFiles.filter((item) => {
+    const filtered = mediaFiles.filter((item) => {
       if (item.ephemeral) return false;
       return true;
     });
@@ -290,8 +290,11 @@ export function MediaView() {
                   <span>Create</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="min-w-[calc(100%+4rem)] pr-8 pl-4">
-                <DropdownMenuItem 
+              <DropdownMenuContent
+                align="start"
+                className="min-w-[calc(100%+4rem)] pr-8 pl-4"
+              >
+                <DropdownMenuItem
                   className="gap-4 py-3"
                   onClick={() => {
                     const store = usePropertiesViewStore.getState();
@@ -302,10 +305,12 @@ export function MediaView() {
                   <Image className="h-6 w-6 shrink-0" />
                   <div className="flex flex-col">
                     <span className="text-base font-medium">Image</span>
-                    <span className="text-sm text-muted-foreground">Generate a still photo.</span>
+                    <span className="text-sm text-muted-foreground">
+                      Generate a still photo.
+                    </span>
                   </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   className="gap-4 py-3"
                   onClick={() => {
                     const store = usePropertiesViewStore.getState();
@@ -316,7 +321,9 @@ export function MediaView() {
                   <Video className="h-6 w-6 shrink-0" />
                   <div className="flex flex-col">
                     <span className="text-base font-medium">Video</span>
-                    <span className="text-sm text-muted-foreground">Generate an 8 second video.</span>
+                    <span className="text-sm text-muted-foreground">
+                      Generate an 8 second video.
+                    </span>
                   </div>
                 </DropdownMenuItem>
               </DropdownMenuContent>

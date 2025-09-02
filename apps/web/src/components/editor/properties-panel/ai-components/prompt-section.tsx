@@ -20,8 +20,7 @@ export function PromptSection({
   return (
     <div className={`space-y-3 ${className}`}>
       <div>
-        <h3 className="text-sm font-medium mb-1">{title}</h3>
-        <p className="text-xs text-muted-foreground">{description}</p>
+        <h3 className="text-m font-medium mb-1">{title}</h3>
       </div>
 
       <Textarea

@@ -508,14 +508,14 @@ export function PreviewPanel() {
         }
       } else {
         const c = offscreenCanvasRef.current as OffscreenCanvas;
-        // @ts-ignore width/height exist on OffscreenCanvas in modern browsers
+        // @ts-expect-error width/height exist on OffscreenCanvas in modern browsers
         if (
           (c as unknown as { width: number }).width !== displayWidth ||
           (c as unknown as { height: number }).height !== displayHeight
         ) {
-          // @ts-ignore
+          // @ts-expect-error
           (c as unknown as { width: number }).width = displayWidth;
-          // @ts-ignore
+          // @ts-expect-error
           (c as unknown as { height: number }).height = displayHeight;
         }
       }

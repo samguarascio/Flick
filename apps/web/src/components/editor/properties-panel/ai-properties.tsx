@@ -11,11 +11,15 @@ interface AIPropertiesProps {
 
 export function AIProperties({ onClose, task }: AIPropertiesProps) {
   return (
-    <div className="h-full relative p-[1px] rounded-xl" style={{
-      background: "linear-gradient(45deg, rgb(147, 51, 234), rgb(236, 72, 153), rgb(59, 130, 246))",
-      backgroundSize: "200% 200%",
-      animation: "gradient-move 4s linear infinite",
-    }}>
+    <div
+      className="h-full relative p-[1px] rounded-xl"
+      style={{
+        background:
+          "linear-gradient(45deg, rgb(147, 51, 234), rgb(236, 72, 153), rgb(59, 130, 246))",
+        backgroundSize: "200% 200%",
+        animation: "gradient-move 4s linear infinite",
+      }}
+    >
       {/* Main content container */}
       <div className="h-full w-full bg-panel rounded-[calc(0.75rem-1px)]">
         {/* Header with close button */}
@@ -67,31 +71,31 @@ function CreateImageContent() {
   const handleMediaItemDrop = (mediaId: string) => {
     console.log("handleMediaItemDrop called with:", mediaId);
     console.log("Available media files:", mediaFiles);
-    
-    const mediaItem = mediaFiles.find(item => item.id === mediaId);
+
+    const mediaItem = mediaFiles.find((item) => item.id === mediaId);
     console.log("Found media item:", mediaItem);
-    
+
     if (mediaItem && mediaItem.type === "image" && mediaItem.file) {
       console.log("Media item is valid image with file:", mediaItem.file);
-      
+
       // Check if this media item is already in attachments
-      const isAlreadyAttached = attachments.some(file => {
+      const isAlreadyAttached = attachments.some((file) => {
         // For media items, we can check if the file name matches since it's the same file
         return file.name === mediaItem.file.name;
       });
-      
+
       if (isAlreadyAttached) {
         console.log("Media item already attached, skipping");
         return;
       }
-      
+
       if (attachments.length >= 5) {
         console.log("Max files limit reached");
         return;
       }
-      
+
       console.log("Adding file to attachments");
-      setAttachments(prev => {
+      setAttachments((prev) => {
         const newAttachments = [...prev, mediaItem.file];
         console.log("New attachments:", newAttachments);
         return newAttachments;
@@ -100,7 +104,7 @@ function CreateImageContent() {
       console.log("Media item validation failed:", {
         hasMediaItem: !!mediaItem,
         type: mediaItem?.type,
-        hasFile: !!mediaItem?.file
+        hasFile: !!mediaItem?.file,
       });
     }
   };
@@ -108,7 +112,7 @@ function CreateImageContent() {
   return (
     <div className="space-y-6">
       <AttachmentsSection
-        title="Reference Images"
+        title="Attachments"
         description="Drag and drop reference images here"
         acceptedTypes={["image/*"]}
         maxFiles={5}
@@ -116,9 +120,9 @@ function CreateImageContent() {
         onMediaItemDrop={handleMediaItemDrop}
         files={attachments}
       />
-      
+
       <PromptSection
-        title="Image Description"
+        title="Describe the image to create..."
         description="Describe the image you want to generate"
         placeholder="A beautiful landscape with mountains and a lake at sunset..."
         value={prompt}
@@ -126,7 +130,7 @@ function CreateImageContent() {
       />
 
       <div className="pt-4">
-        <Button 
+        <Button
           className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 text-white hover:opacity-90 transition-opacity"
           disabled={!prompt.trim()}
         >
@@ -141,17 +145,40 @@ function CreateImageContent() {
 function CreateVideoContent() {
   const [prompt, setPrompt] = useState("");
   const [attachments, setAttachments] = useState<File[]>([]);
+  const { mediaFiles } = useMediaStore();
+
+  const handleMediaItemDrop = (mediaId: string) => {
+    const mediaItem = mediaFiles.find((item) => item.id === mediaId);
+    if (mediaItem && mediaItem.type === "image" && mediaItem.file) {
+      // Check if this media item is already in attachments
+      const isAlreadyAttached = attachments.some((file) => {
+        return file.name === mediaItem.file.name;
+      });
+      
+      if (isAlreadyAttached) {
+        return;
+      }
+      
+      if (attachments.length >= 5) {
+        return;
+      }
+      
+      setAttachments((prev) => [...prev, mediaItem.file]);
+    }
+  };
 
   return (
     <div className="space-y-6">
       <AttachmentsSection
-        title="Reference Images"
-        description="Drag and drop reference images or click to browse"
+        title="Attachments"
+        description="Drag and drop reference images here"
         acceptedTypes={["image/*"]}
-        maxFiles={3}
+        maxFiles={5}
         onFilesChange={setAttachments}
+        onMediaItemDrop={handleMediaItemDrop}
+        files={attachments}
       />
-      
+
       <PromptSection
         title="Video Description"
         description="Describe the video you want to generate"
@@ -159,6 +186,16 @@ function CreateVideoContent() {
         value={prompt}
         onChange={setPrompt}
       />
+
+      <div className="pt-4">
+        <Button
+          className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 text-white hover:opacity-90 transition-opacity"
+          disabled={!prompt.trim()}
+        >
+          <Wand2 className="h-4 w-4 mr-2" />
+          AI Generate
+        </Button>
+      </div>
     </div>
   );
 }

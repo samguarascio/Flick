@@ -230,9 +230,9 @@ export default function Editor() {
                 </ResizablePanelGroup>
               </ResizablePanel>
             </ResizablePanelGroup>
-          ) : activePreset === "inspector" ? (
+          ) : activePreset === "default" ? (
             <ResizablePanelGroup
-              key={`inspector-${activePreset}-${resetCounter}`}
+              key={`default-${activePreset}-${resetCounter}`}
               direction="horizontal"
               className="h-full w-full gap-[0.18rem] px-3 pb-3"
             >

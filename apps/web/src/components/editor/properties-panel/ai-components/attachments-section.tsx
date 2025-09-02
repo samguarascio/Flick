@@ -25,29 +25,34 @@ export function AttachmentsSection({
 }: AttachmentsSectionProps) {
   const [internalFiles, setInternalFiles] = useState<File[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
-  
+
   // Use external files if provided, otherwise use internal state
   const files = externalFiles || internalFiles;
-  const setFiles = externalFiles ? (newFiles: File[]) => onFilesChange?.(newFiles) : setInternalFiles;
+  const setFiles = externalFiles
+    ? (newFiles: File[]) => onFilesChange?.(newFiles)
+    : setInternalFiles;
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(true);
-    
+
     // Debug: Check what's available during drag over
     console.log("Drag over event triggered");
     console.log("Drag over - types:", e.dataTransfer.types);
     console.log("Drag over - effectAllowed:", e.dataTransfer.effectAllowed);
-    
+
     if (e.dataTransfer.types.includes("application/x-media-item")) {
       console.log("Media item type detected during drag over");
     }
-    
+
     // Also check if we can see the data during drag over
     try {
       const mediaItemData = e.dataTransfer.getData("application/x-media-item");
       if (mediaItemData) {
-        console.log("Media item data available during drag over:", mediaItemData);
+        console.log(
+          "Media item data available during drag over:",
+          mediaItemData
+        );
       }
     } catch (error) {
       // This is expected - getData only works on drop
@@ -62,13 +67,13 @@ export function AttachmentsSection({
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
+
     console.log("Drop event triggered");
     console.log("DataTransfer types:", e.dataTransfer.types);
     console.log("Files:", e.dataTransfer.files);
-    
+
     let newFiles: File[] = [];
-    
+
     // Check for custom media panel drag data first
     // Try multiple ways to get the data
     let mediaItemData = e.dataTransfer.getData("application/x-media-item");
@@ -80,9 +85,9 @@ export function AttachmentsSection({
       // Try getting it as plain text
       mediaItemData = e.dataTransfer.getData("text/plain");
     }
-    
+
     console.log("Media item data:", mediaItemData);
-    
+
     if (mediaItemData) {
       try {
         const dragData = JSON.parse(mediaItemData);
@@ -96,11 +101,11 @@ export function AttachmentsSection({
         console.error("Failed to parse media item data:", error);
       }
     }
-    
+
     // Handle regular file drops
     const droppedFiles = Array.from(e.dataTransfer.files);
-    const validFiles = droppedFiles.filter(file => 
-      acceptedTypes.some(type => {
+    const validFiles = droppedFiles.filter((file) =>
+      acceptedTypes.some((type) => {
         if (type.endsWith("/*")) {
           return file.type.startsWith(type.slice(0, -1));
         }
@@ -118,8 +123,6 @@ export function AttachmentsSection({
     onFilesChange?.(newFiles);
   };
 
-
-
   const removeFile = (index: number) => {
     const newFiles = files.filter((_, i) => i !== index);
     setFiles(newFiles);
@@ -129,7 +132,7 @@ export function AttachmentsSection({
   return (
     <div className={cn("space-y-3", className)}>
       <div>
-        <h3 className="text-sm font-medium mb-1">{title}</h3>
+        <h3 className="text-sm text-muted-foreground font-medium mb-1">{title}</h3>
         <p className="text-xs text-muted-foreground">{description}</p>
       </div>
 
@@ -137,8 +140,8 @@ export function AttachmentsSection({
       <div
         className={cn(
           "border-2 border-dashed rounded-lg p-4 text-center transition-colors",
-          isDragOver 
-            ? "border-primary bg-primary/5" 
+          isDragOver
+            ? "border-primary bg-primary/5"
             : "border-muted-foreground/25 hover:border-muted-foreground/50"
         )}
         onDragEnter={handleDragOver}
@@ -146,7 +149,7 @@ export function AttachmentsSection({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <Upload className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
+        <Upload className="mx-auto h-4 w-4 text-muted-foreground mb-2" />
         <p className="text-sm text-muted-foreground">
           {isDragOver ? "Drop images here" : "Drag and drop images here"}
         </p>

@@ -13,15 +13,15 @@ import { usePanelStore, type PanelPreset } from "@/stores/panel-store";
 
 const PRESET_LABELS: Record<PanelPreset, string> = {
   default: "Default",
+  "long-timeline": "Long Timeline",
   media: "Media",
-  inspector: "Inspector",
   "vertical-preview": "Vertical Preview",
 };
 
 const PRESET_DESCRIPTIONS: Record<PanelPreset, string> = {
-  default: "Media, preview, and inspector on top row, timeline on bottom",
+  default: "Full height inspector on right, media and preview on top row",
+  "long-timeline": "Media, preview, and inspector on top row, timeline on bottom",
   media: "Full height media on left, preview and inspector on top row",
-  inspector: "Full height inspector on right, media and preview on top row",
   "vertical-preview": "Full height preview on right for vertical videos",
 };
 

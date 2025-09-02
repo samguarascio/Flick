@@ -903,8 +903,19 @@ export function Timeline() {
                   width: `${dynamicTimelineWidth}px`,
                 }}
               >
-                {tracks.length === 0 ? (
-                  <div />
+                {tracks.every(track => track.elements.length === 0) ? (
+                  <>
+                    {/* Render the main track placeholder */}
+                    <div
+                      className="absolute left-0 right-0"
+                      style={{
+                        top: "0px",
+                        height: `${getTrackHeight("media")}px`,
+                      }}
+                    >
+                      <div className="w-full h-full rounded-sm border-2 border-dashed border-muted/30" />
+                    </div>
+                  </>
                 ) : (
                   <>
                     {tracks.map((track, index) => (
@@ -956,6 +967,31 @@ export function Timeline() {
                     ))}
                   </>
                 )}
+                
+                {/* Generate a new video overlay - positioned as a track */}
+                <div 
+                  className="absolute left-0 right-0 flex items-center cursor-pointer"
+                  style={{
+                    top: `${getTotalTracksHeight(tracks)}px`,
+                    height: `${getTrackHeight("media")}px`,
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const store = usePropertiesViewStore.getState();
+                    store.setAITask("Create Video");
+                    store.setActiveTab("ai");
+                  }}
+                >
+                  <div className="relative w-full h-full rounded-[0.5rem] border-2 border-dashed border-muted/30 flex items-center overflow-hidden">
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 opacity-20" />
+                    {/* White text overlay */}
+                    <div className="relative z-10 text-white font-medium text-base max-w-xs flex items-center gap-2 ml-8">
+                      <Plus className="h-4 w-4" />
+                      Generate a new video
+                    </div>
+                  </div>
+                </div>
               </div>
             </ScrollArea>
           </div>

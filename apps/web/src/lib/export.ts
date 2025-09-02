@@ -45,11 +45,12 @@ async function createTimelineAudioBuffer(
   tracks: TimelineTrack[],
   mediaFiles: MediaFile[],
   duration: number,
-  sampleRate: number = 44100
+  sampleRate = 44_100
 ): Promise<AudioBuffer | null> {
   // Get Web Audio context
-  const audioContext = new (window.AudioContext ||
-    (window as any).webkitAudioContext)();
+  const audioContext = new (
+    window.AudioContext || (window as any).webkitAudioContext
+  )();
 
   // Collect all audio elements from timeline
   const audioElements: AudioElement[] = [];
@@ -61,7 +62,8 @@ async function createTimelineAudioBuffer(
     for (const element of track.elements) {
       if (element.type !== "media") continue;
 
-      const mediaItem = element.type === "media" ? mediaMap.get(element.mediaId) : null;
+      const mediaItem =
+        element.type === "media" ? mediaMap.get(element.mediaId) : null;
       if (!mediaItem || mediaItem.type !== "audio") continue;
 
       const visibleDuration =

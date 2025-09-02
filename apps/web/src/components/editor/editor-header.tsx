@@ -21,7 +21,6 @@ import { FaDiscord } from "react-icons/fa6";
 import { PanelPresetSelector } from "./panel-preset-selector";
 import { ExportButton } from "./export-button";
 
-
 export function EditorHeader() {
   const { activeProject, renameProject, deleteProject } = useProjectStore();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
