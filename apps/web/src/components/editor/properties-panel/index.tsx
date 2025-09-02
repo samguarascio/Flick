@@ -17,7 +17,7 @@ export function PropertiesPanel() {
   const { activeTab, setActiveTab } = usePropertiesViewStore();
 
   return (
-    <div className="flex flex-col h-full bg-panel rounded-sm">
+    <div className="flex flex-col h-full bg-panel rounded-sm overflow-y-scroll">
       <div className="flex-1">
         {activeTab === "properties" ? (
           <ScrollArea className="h-full">
