@@ -8,13 +8,12 @@ import { MediaProperties } from "./media-properties";
 import { TextProperties } from "./text-properties";
 import { AIProperties } from "./ai-properties";
 import { SquareSlashIcon, X } from "lucide-react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PROPERTIES_VIEW_TABS, usePropertiesViewStore } from "@/stores/properties-view-store";
+import { usePropertiesViewStore } from "@/stores/properties-view-store";
 
 export function PropertiesPanel() {
   const { selectedElements, tracks } = useTimelineStore();
   const { mediaFiles } = useMediaStore();
-  const { activeTab, setActiveTab } = usePropertiesViewStore();
+  const { activeTab, setActiveTab, aiTask } = usePropertiesViewStore();
 
   return (
     <div className="flex flex-col h-full bg-panel rounded-sm overflow-y-scroll">
@@ -60,7 +59,7 @@ export function PropertiesPanel() {
           <div className="h-full">
             <AIProperties 
               onClose={() => setActiveTab("properties")} 
-              task={usePropertiesViewStore.getState().aiTask || undefined}
+              task={aiTask || undefined}
             />
           </div>
         )}

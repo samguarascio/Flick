@@ -1,5 +1,5 @@
 import { X, Wand2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AttachmentsSection, PromptSection } from "./ai-components";
 import { Button } from "@/components/ui/button";
 import { useMediaStore } from "@/stores/media-store";
@@ -10,6 +10,24 @@ interface AIPropertiesProps {
 }
 
 export function AIProperties({ onClose, task }: AIPropertiesProps) {
+  const [isFlashing, setIsFlashing] = useState(false);
+  const previousTaskRef = useRef<string | undefined>(undefined);
+
+  // Detect task changes and trigger flash effect
+  useEffect(() => {
+    if (task) {
+      // Always flash when there's a task
+      setIsFlashing(true);
+      
+      // Remove flash class after animation completes
+      const timer = setTimeout(() => {
+        setIsFlashing(false);
+      }, 300); // Quick 300ms flash
+      
+      return () => clearTimeout(timer);
+    }
+  }, [task]);
+
   return (
     <div
       className="h-full relative p-[1px] rounded-xl"
@@ -21,7 +39,12 @@ export function AIProperties({ onClose, task }: AIPropertiesProps) {
       }}
     >
       {/* Main content container */}
-      <div className="h-full w-full bg-panel rounded-[calc(0.75rem-1px)]">
+      <div 
+        className={`h-full w-full rounded-[calc(0.75rem-1px)] transition-background-color duration-300`}
+        style={{
+          backgroundColor: isFlashing ? '#434343' : '#1C1C1C'
+        }}
+      >
         {/* Header with close button */}
         <div className="flex items-center justify-between p-4">
           <h2 className="text-m font-medium">{task || "AI Generation"}</h2>

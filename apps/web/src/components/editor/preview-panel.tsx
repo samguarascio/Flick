@@ -592,53 +592,80 @@ export function PreviewPanel() {
           ref={containerRef}
           className="flex-1 flex flex-col items-center justify-center min-h-0 min-w-0"
         >
-          <div className="flex-1" />
           {hasAnyElements ? (
-            <div
-              ref={previewRef}
-              className="relative overflow-hidden border"
-              style={{
-                width: previewDimensions.width,
-                height: previewDimensions.height,
-                background:
-                  activeProject?.backgroundType === "blur"
-                    ? "transparent"
-                    : activeProject?.backgroundColor || "#000000",
-              }}
-            >
-              {renderBlurBackground()}
-              <canvas
-                ref={canvasRef}
+            <div className="relative">
+              <div
+                ref={previewRef}
+                className="relative overflow-hidden border"
                 style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
                   width: previewDimensions.width,
                   height: previewDimensions.height,
+                  background:
+                    activeProject?.backgroundType === "blur"
+                      ? "transparent"
+                      : activeProject?.backgroundColor || "#000000",
                 }}
-                aria-label="Video preview canvas"
-              />
-              {activeElements.length === 0 ? (
-                <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+              >
+                {renderBlurBackground()}
+                <canvas
+                  ref={canvasRef}
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    width: previewDimensions.width,
+                    height: previewDimensions.height,
+                  }}
+                  aria-label="Video preview canvas"
+                />
+                {activeElements.length === 0 ? (
+                  <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+                  </div>
+                ) : (
+                  activeElements.map((elementData) => renderElement(elementData))
+                )}
+                <LayoutGuideOverlay />
+              </div>
+              
+              {/* Toolbar positioned to the right of preview in portrait mode */}
+              {previewDimensions.width < previewDimensions.height && (
+                <div 
+                  className="absolute"
+                  style={{
+                    left: previewDimensions.width + 16, // 16px gap to the right of preview
+                    top: previewDimensions.height - 40, // Align with bottom of preview
+                  }}
+                >
+                  <PreviewToolbar
+                    hasAnyElements={hasAnyElements}
+                    onToggleExpanded={toggleExpanded}
+                    isExpanded={isExpanded}
+                    currentTime={currentTime}
+                    setCurrentTime={setCurrentTime}
+                    toggle={toggle}
+                    getTotalDuration={getTotalDuration}
+                    isPortraitMode={true}
+                  />
                 </div>
-              ) : (
-                activeElements.map((elementData) => renderElement(elementData))
               )}
-              <LayoutGuideOverlay />
             </div>
           ) : null}
 
-          <div className="flex-1" />
+          {previewDimensions.width >= previewDimensions.height && <div className="flex-1" />}
 
-          <PreviewToolbar
-            hasAnyElements={hasAnyElements}
-            onToggleExpanded={toggleExpanded}
-            isExpanded={isExpanded}
-            currentTime={currentTime}
-            setCurrentTime={setCurrentTime}
-            toggle={toggle}
-            getTotalDuration={getTotalDuration}
-          />
+          {/* Only show toolbar below for landscape mode */}
+          {previewDimensions.width >= previewDimensions.height && (
+            <PreviewToolbar
+              hasAnyElements={hasAnyElements}
+              onToggleExpanded={toggleExpanded}
+              isExpanded={isExpanded}
+              currentTime={currentTime}
+              setCurrentTime={setCurrentTime}
+              toggle={toggle}
+              getTotalDuration={getTotalDuration}
+              isPortraitMode={false}
+            />
+          )}
         </div>
       </div>
 
@@ -904,6 +931,7 @@ function PreviewToolbar({
   setCurrentTime,
   toggle,
   getTotalDuration,
+  isPortraitMode = false,
 }: {
   hasAnyElements: boolean;
   onToggleExpanded: () => void;
@@ -912,6 +940,7 @@ function PreviewToolbar({
   setCurrentTime: (time: number) => void;
   toggle: () => void;
   getTotalDuration: () => number;
+  isPortraitMode?: boolean;
 }) {
   const { isPlaying } = usePlaybackStore();
   const { layoutGuide, toggleLayoutGuide } = useEditorStore();
@@ -934,7 +963,9 @@ function PreviewToolbar({
   return (
     <div
       data-toolbar
-      className="flex justify-end gap-2 h-auto pb-5 pr-5 pt-4 w-full"
+      className={`flex justify-end gap-2 h-auto pr-5 pt-4 w-full ${
+        isPortraitMode ? "pb-2" : "pb-5"
+      }`}
     >
       <div className="flex items-center gap-2">
         <Button

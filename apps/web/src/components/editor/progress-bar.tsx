@@ -16,9 +16,9 @@ export function ProgressBar({ value, maxValue, hasPro, onIncrement, className = 
   
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      <div className="flex items-center gap-3 min-w-[140px]">
+      <div className="flex items-center gap-3 min-w-[160px]">
         <span className="text-sm text-muted-foreground text-right">
-        Usage
+        AI Usage
       </span>
         <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
           <div 

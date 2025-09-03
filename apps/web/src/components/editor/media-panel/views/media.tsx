@@ -340,7 +340,7 @@ export function MediaView() {
               ) : (
                 <CloudUpload className="h-4 w-4" />
               )}
-              <span>Upload</span>
+              <span>Import</span>
             </Button>
 
             <div className="flex items-center gap-0">

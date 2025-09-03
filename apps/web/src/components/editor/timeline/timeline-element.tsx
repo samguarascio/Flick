@@ -33,6 +33,7 @@ import {
   ContextMenuTrigger,
 } from "../../ui/context-menu";
 import { useMediaPanelStore } from "../media-panel/store";
+import { usePropertiesViewStore } from "@/stores/properties-view-store";
 
 export function TimelineElement({
   element,
@@ -319,9 +320,9 @@ export function TimelineElement({
               isHovered &&
               mediaItem &&
               (mediaItem.type === "image" || mediaItem.type === "video") && (
-                <div
+                <button
                   className={
-                    "absolute right-[-50px] top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 to-blue-500"
+                    "absolute right-[-50px] top-[0.25rem] bottom-[0.25rem] bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 transition-opacity cursor-pointer"
                   }
                   style={{
                     width: "50px",
@@ -329,9 +330,16 @@ export function TimelineElement({
                     display: "flex",
                     alignItems: "center",
                   }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const store = usePropertiesViewStore.getState();
+                    store.setAITask("Extend Clip");
+                    store.setActiveTab("ai");
+                  }}
+                  title="Extend clip"
                 >
-                  <Plus className="m-auto" />
-                </div>
+                  <Plus className="m-auto text-white" />
+                </button>
               )}
             {isSelected && (
               <>
