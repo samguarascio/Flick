@@ -120,7 +120,7 @@ export function EditorHeader() {
       <ProgressBar 
         value={1} 
         maxValue={2}
-        hasPro={true} 
+        hasPro={false} 
         onIncrement={() => console.log("Increment clicked")}
       />
       <ExportButton />

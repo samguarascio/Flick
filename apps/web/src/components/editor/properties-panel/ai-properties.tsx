@@ -1,8 +1,79 @@
 import { X, Wand2 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { AttachmentsSection, PromptSection } from "./ai-components";
 import { Button } from "@/components/ui/button";
 import { useMediaStore } from "@/stores/media-store";
+import { MediaFile } from "@/types/media";
+
+// Fill text animation component
+function WavyText({ text }: { text: string }) {
+  return (
+    <motion.p 
+      className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg relative overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.span
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-600 via-pink-500 via-blue-500 to-transparent opacity-30"
+        animate={{
+          x: ["-100%", "100%"],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          repeatType: "reverse",
+          ease: "easeInOut"
+        }}
+      />
+      <span className="relative z-10">{text}</span>
+    </motion.p>
+  );
+}
+
+// Generating state component
+interface GeneratingStateProps {
+  title: string;
+  prompt: string;
+  onCancel: () => void;
+}
+
+function GeneratingState({ title, prompt, onCancel }: GeneratingStateProps) {
+  return (
+    <div className="space-y-6 pt-16 select-none">
+      <div className="text-center space-y-8">
+        <motion.h3 
+          className="text-lg font-medium bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 bg-clip-text text-transparent"
+          animate={{
+            backgroundPosition: ["0% 50%", "100% 50%"],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut"
+          }}
+          style={{
+            backgroundSize: "200% 200%"
+          }}
+        >
+          {title}
+        </motion.h3>
+        <WavyText text={prompt} />
+      </div>
+      
+      <div className="pt-4 text-center">
+        <button
+          className="text-sm text-white hover:opacity-70 transition-opacity cursor-pointer"
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
 
 interface AIPropertiesProps {
   onClose: () => void;
@@ -89,6 +160,8 @@ export function AIProperties({ onClose, task }: AIPropertiesProps) {
 function CreateImageContent() {
   const [prompt, setPrompt] = useState("");
   const [attachments, setAttachments] = useState<File[]>([]);
+  const [attachedMediaFiles, setAttachedMediaFiles] = useState<MediaFile[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
   const { mediaFiles } = useMediaStore();
 
   const handleMediaItemDrop = (mediaId: string) => {
@@ -102,25 +175,22 @@ function CreateImageContent() {
       console.log("Media item is valid image with file:", mediaItem.file);
 
       // Check if this media item is already in attachments
-      const isAlreadyAttached = attachments.some((file) => {
-        // For media items, we can check if the file name matches since it's the same file
-        return file.name === mediaItem.file.name;
-      });
+      const isAlreadyAttached = attachedMediaFiles.some((item) => item.id === mediaId);
 
       if (isAlreadyAttached) {
         console.log("Media item already attached, skipping");
         return;
       }
 
-      if (attachments.length >= 5) {
+      if (attachedMediaFiles.length >= 5) {
         console.log("Max files limit reached");
         return;
       }
 
-      console.log("Adding file to attachments");
-      setAttachments((prev) => {
-        const newAttachments = [...prev, mediaItem.file];
-        console.log("New attachments:", newAttachments);
+      console.log("Adding media item to attachments");
+      setAttachedMediaFiles((prev) => {
+        const newAttachments = [...prev, mediaItem];
+        console.log("New media attachments:", newAttachments);
         return newAttachments;
       });
     } else {
@@ -132,22 +202,45 @@ function CreateImageContent() {
     }
   };
 
+  const handleGenerate = () => {
+    if (!prompt.trim()) return;
+    setIsGenerating(true);
+    // TODO: Implement actual AI generation logic here
+  };
+
+  const handleCancel = () => {
+    setIsGenerating(false);
+    // TODO: Implement actual cancellation logic here
+  };
+
+  if (isGenerating) {
+    return (
+      <GeneratingState
+        title="Generating your image..."
+        prompt={prompt}
+        onCancel={handleCancel}
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
       <AttachmentsSection
         title="Attachments"
-        description="Drag and drop reference images here"
+        description="Here you can attach media and reference it."
         acceptedTypes={["image/*"]}
         maxFiles={5}
         onFilesChange={setAttachments}
+        onMediaFilesChange={setAttachedMediaFiles}
         onMediaItemDrop={handleMediaItemDrop}
         files={attachments}
+        mediaFiles={attachedMediaFiles}
       />
 
       <PromptSection
         title="Describe the image to create..."
         description="Describe the image you want to generate"
-        placeholder="A beautiful landscape with mountains and a lake at sunset..."
+        placeholder="A beautiful landscape with mountains and a lake at sunset"
         value={prompt}
         onChange={setPrompt}
       />
@@ -156,6 +249,7 @@ function CreateImageContent() {
         <Button
           className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 text-white hover:opacity-90 transition-opacity"
           disabled={!prompt.trim()}
+          onClick={handleGenerate}
         >
           <Wand2 className="h-4 w-4 mr-2" />
           AI Generate
@@ -168,25 +262,24 @@ function CreateImageContent() {
 function CreateVideoContent() {
   const [prompt, setPrompt] = useState("");
   const [attachments, setAttachments] = useState<File[]>([]);
+  const [attachedMediaFiles, setAttachedMediaFiles] = useState<MediaFile[]>([]);
   const { mediaFiles } = useMediaStore();
 
   const handleMediaItemDrop = (mediaId: string) => {
     const mediaItem = mediaFiles.find((item) => item.id === mediaId);
     if (mediaItem && mediaItem.type === "image" && mediaItem.file) {
       // Check if this media item is already in attachments
-      const isAlreadyAttached = attachments.some((file) => {
-        return file.name === mediaItem.file.name;
-      });
+      const isAlreadyAttached = attachedMediaFiles.some((item) => item.id === mediaId);
       
       if (isAlreadyAttached) {
         return;
       }
       
-      if (attachments.length >= 5) {
+      if (attachedMediaFiles.length >= 5) {
         return;
       }
       
-      setAttachments((prev) => [...prev, mediaItem.file]);
+      setAttachedMediaFiles((prev) => [...prev, mediaItem]);
     }
   };
 
@@ -198,14 +291,16 @@ function CreateVideoContent() {
         acceptedTypes={["image/*"]}
         maxFiles={5}
         onFilesChange={setAttachments}
+        onMediaFilesChange={setAttachedMediaFiles}
         onMediaItemDrop={handleMediaItemDrop}
         files={attachments}
+        mediaFiles={attachedMediaFiles}
       />
 
       <PromptSection
-        title="Video Description"
+        title="Describe the video to create..."
         description="Describe the video you want to generate"
-        placeholder="A short video showing a cat playing with a ball..."
+        placeholder="An ape vlogging while climbing a mountain"
         value={prompt}
         onChange={setPrompt}
       />
@@ -225,32 +320,164 @@ function CreateVideoContent() {
 
 function MakeEditContent() {
   const [prompt, setPrompt] = useState("");
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [attachedMediaFiles, setAttachedMediaFiles] = useState<MediaFile[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { mediaFiles } = useMediaStore();
+
+  const handleMediaItemDrop = (mediaId: string) => {
+    const mediaItem = mediaFiles.find((item) => item.id === mediaId);
+    if (mediaItem && (mediaItem.type === "image" || mediaItem.type === "video") && mediaItem.file) {
+      // Check if this media item is already in attachments
+      const isAlreadyAttached = attachedMediaFiles.some((item) => item.id === mediaId);
+      
+      if (isAlreadyAttached) {
+        return;
+      }
+      
+      if (attachedMediaFiles.length >= 5) {
+        return;
+      }
+      
+      setAttachedMediaFiles((prev) => [...prev, mediaItem]);
+    }
+  };
+
+  const handleGenerate = () => {
+    if (!prompt.trim()) return;
+    setIsGenerating(true);
+    // TODO: Implement actual AI generation logic here
+  };
+
+  const handleCancel = () => {
+    setIsGenerating(false);
+    // TODO: Implement actual cancellation logic here
+  };
+
+  if (isGenerating) {
+    return (
+      <GeneratingState
+        title="Making your edit..."
+        prompt={prompt}
+        onCancel={handleCancel}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">
+      <AttachmentsSection
+        title="Attachments"
+        description="Here you can attach media and reference it."
+        acceptedTypes={["image/*", "video/*"]}
+        maxFiles={5}
+        onFilesChange={setAttachments}
+        onMediaFilesChange={setAttachedMediaFiles}
+        onMediaItemDrop={handleMediaItemDrop}
+        files={attachments}
+        mediaFiles={attachedMediaFiles}
+      />
+
       <PromptSection
-        title="Edit Instructions"
-        description="Describe what changes you want to make to the clip"
-        placeholder="Remove the background, change the lighting to sunset..."
+        title="Describe the edit..."
+        description="What changes should be made?"
+        placeholder="Change the lighting to sunset"
         value={prompt}
         onChange={setPrompt}
       />
+
+      <div className="pt-4">
+        <Button
+          className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 text-white hover:opacity-90 transition-opacity"
+          disabled={!prompt.trim()}
+          onClick={handleGenerate}
+        >
+          <Wand2 className="h-4 w-4 mr-2" />
+          AI Generate
+        </Button>
+      </div>
     </div>
   );
 }
 
 function ExtendClipContent() {
   const [prompt, setPrompt] = useState("");
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [attachedMediaFiles, setAttachedMediaFiles] = useState<MediaFile[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { mediaFiles } = useMediaStore();
+
+  const handleMediaItemDrop = (mediaId: string) => {
+    const mediaItem = mediaFiles.find((item) => item.id === mediaId);
+    if (mediaItem && (mediaItem.type === "image" || mediaItem.type === "video") && mediaItem.file) {
+      // Check if this media item is already in attachments
+      const isAlreadyAttached = attachedMediaFiles.some((item) => item.id === mediaId);
+      
+      if (isAlreadyAttached) {
+        return;
+      }
+      
+      if (attachedMediaFiles.length >= 5) {
+        return;
+      }
+      
+      setAttachedMediaFiles((prev) => [...prev, mediaItem]);
+    }
+  };
+
+  const handleGenerate = () => {
+    if (!prompt.trim()) return;
+    setIsGenerating(true);
+    // TODO: Implement actual AI generation logic here
+  };
+
+  const handleCancel = () => {
+    setIsGenerating(false);
+    // TODO: Implement actual cancellation logic here
+  };
+
+  if (isGenerating) {
+    return (
+      <GeneratingState
+        title="Extending your clip..."
+        prompt={prompt}
+        onCancel={handleCancel}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">
+      <AttachmentsSection
+        title="Attachments"
+        description="Here you can attach media and reference it."
+        acceptedTypes={["image/*", "video/*"]}
+        maxFiles={5}
+        onFilesChange={setAttachments}
+        onMediaFilesChange={setAttachedMediaFiles}
+        onMediaItemDrop={handleMediaItemDrop}
+        files={attachments}
+        mediaFiles={attachedMediaFiles}
+      />
+
       <PromptSection
-        title="Extension Instructions"
+        title="Describe how to extend..."
         description="Describe how you want to extend the clip"
-        placeholder="Continue the scene with more action, extend the ending..."
+        placeholder="Make the character hold still while laughing"
         value={prompt}
         onChange={setPrompt}
       />
+
+      <div className="pt-4">
+        <Button
+          className="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 text-white hover:opacity-90 transition-opacity"
+          disabled={!prompt.trim()}
+          onClick={handleGenerate}
+        >
+          <Wand2 className="h-4 w-4 mr-2" />
+          AI Generate
+        </Button>
+      </div>
     </div>
   );
 }
